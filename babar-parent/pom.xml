@@ -14,6 +14,7 @@
 	</properties>
 	<modules>
 		<module>../babar-client</module>
+		<module>../babar-common</module>
 	</modules>
 	<build>
 		<pluginManagement>
