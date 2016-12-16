@@ -1,6 +1,10 @@
 package com.babar.common;
 
-public class BabarResponse {
+import java.io.Serializable;
+
+public class BabarResponse implements Serializable{
+	private static final long serialVersionUID = 1L;
+
 	private String requestId;
 	private Throwable error;
 	private Object result;
