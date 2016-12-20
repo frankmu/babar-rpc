@@ -6,7 +6,7 @@
 		<artifactId>babar-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>babar-core</artifactId>
+	<artifactId>babar-sample-service-impl</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>babar</groupId>
@@ -15,18 +15,13 @@
 		</dependency>
 		<dependency>
 			<groupId>babar</groupId>
-			<artifactId>babar-sample-service-impl</artifactId>
+			<artifactId>babar-sample-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>4.3.4.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
-			<version>4.1.6.Final</version>
 		</dependency>
 	</dependencies>
 </project>

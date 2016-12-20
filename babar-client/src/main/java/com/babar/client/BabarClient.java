@@ -10,6 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.babar.common.BabarRequest;
+import com.babar.sample.service.IBabarSampleService;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -34,6 +35,12 @@ public class BabarClient {
 			Channel ch = b.connect(env.getProperty("server.host"), Integer.parseInt(env.getProperty("server.port"))).sync().channel();
 			BabarRequest req = new BabarRequest();
 			req.setRequestId(UUID.randomUUID().toString());
+			req.setClassName(IBabarSampleService.class.getName());
+			req.setMethodName("Hello");
+			String[] parameters = {"World"};
+			req.setParameters(parameters);
+			Class<?>[] parameterTypes = {String.class};
+			req.setParameterTypes(parameterTypes);
 			ch.writeAndFlush(req);
 			ch.closeFuture().sync();
 		} catch (InterruptedException e) {
