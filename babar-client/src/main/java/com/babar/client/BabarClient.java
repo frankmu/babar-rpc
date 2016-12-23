@@ -13,45 +13,40 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.pool.ChannelPool;
+import io.netty.channel.pool.SimpleChannelPool;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.FutureListener;
 
 @PropertySource("classpath:application.properties")
 @Component
 public class BabarClient {
 	@Autowired
 	private Environment env;
-	private Channel ch;
+	private ChannelPool pool;
 
 	@EventListener
 	public void handleContextRefresh(ContextRefreshedEvent event){
-//		EventLoopGroup group = new NioEventLoopGroup();
-//		try {
-//			Bootstrap b = new Bootstrap();
-//			b.group(group);
-//			b.channel(NioSocketChannel.class);
-//			b.handler(new BabarClientInitializer());
-//			ch = b.connect(env.getProperty("rpc.server.host"), Integer.parseInt(env.getProperty("rpc.server.port"))).sync().channel();
-//			ch.closeFuture().sync();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		} finally {
-//			group.shutdownGracefully();
-//		}
+		EventLoopGroup group = new NioEventLoopGroup();
+		Bootstrap b = new Bootstrap();
+		b.group(group);
+		b.channel(NioSocketChannel.class);
+		b.remoteAddress(env.getProperty("rpc.server.host"), Integer.parseInt(env.getProperty("rpc.server.port")));
+		pool = new SimpleChannelPool(b, new BabarClientChannelPoolHandler());
 	}
 
 	public void send(BabarRequest req){
-		EventLoopGroup group = new NioEventLoopGroup();
-		try {
-			Bootstrap b = new Bootstrap();
-			b.group(group);
-			b.channel(NioSocketChannel.class);
-			b.handler(new BabarClientInitializer());
-			ch = b.connect(env.getProperty("rpc.server.host"), Integer.parseInt(env.getProperty("rpc.server.port"))).sync().channel();
-			ch.writeAndFlush(req);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} finally {
-			group.shutdownGracefully();
-		}
+		Future<Channel> f = pool.acquire();
+		f.addListener(new FutureListener<Channel>() {
+			@Override
+			public void operationComplete(Future<Channel> future) throws Exception {
+				if(f.isSuccess()){
+					Channel ch = f.getNow();
+					ch.writeAndFlush(req);
+					pool.release(ch);
+				}
+			}
+		});
 	}
 }
