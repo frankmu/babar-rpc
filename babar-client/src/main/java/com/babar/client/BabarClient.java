@@ -22,8 +22,13 @@ import io.netty.util.concurrent.FutureListener;
 @PropertySource("classpath:application.properties")
 @Component
 public class BabarClient {
+
 	@Autowired
 	private Environment env;
+
+	@Autowired
+	BabarClientChannelPoolHandler babarClientChannelPoolHandler;
+
 	private ChannelPool pool;
 
 	@EventListener
@@ -33,7 +38,7 @@ public class BabarClient {
 		b.group(group);
 		b.channel(NioSocketChannel.class);
 		b.remoteAddress(env.getProperty("rpc.server.host"), Integer.parseInt(env.getProperty("rpc.server.port")));
-		pool = new SimpleChannelPool(b, new BabarClientChannelPoolHandler());
+		pool = new SimpleChannelPool(b, babarClientChannelPoolHandler);
 	}
 
 	public void send(BabarRequest req){

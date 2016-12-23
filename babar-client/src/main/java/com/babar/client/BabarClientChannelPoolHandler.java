@@ -1,5 +1,8 @@
 package com.babar.client;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.pool.ChannelPoolHandler;
@@ -9,7 +12,11 @@ import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 
+@Component
 public class BabarClientChannelPoolHandler implements ChannelPoolHandler{
+
+	@Autowired
+	BabarResponseMap babarResponseMap;
 
 	@Override
 	public void channelReleased(Channel ch) throws Exception {	
@@ -26,7 +33,7 @@ public class BabarClientChannelPoolHandler implements ChannelPoolHandler{
 		pipeline.addLast(new LengthFieldPrepender(4));
 		pipeline.addLast(new ObjectEncoder());
 		pipeline.addLast(new ObjectDecoder(ClassResolvers.cacheDisabled(null)));	
-		pipeline.addLast(new BabarClientHandler());
+		pipeline.addLast(new BabarClientHandler(babarResponseMap));
 	}
 
 }
