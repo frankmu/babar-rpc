@@ -3,6 +3,9 @@ package com.babar.core.server;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.babar.common.BabarRequest;
 import com.babar.common.BabarResponse;
 
@@ -12,6 +15,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class BabarServerHandler extends SimpleChannelInboundHandler<BabarRequest> {
 	
 	private Map<String, Object> handlerMap;
+	Log log = LogFactory.getLog(this.getClass());
 	
 	public BabarServerHandler(Map<String, Object> handlerMap) {
 		this.handlerMap = handlerMap;
@@ -19,7 +23,7 @@ public class BabarServerHandler extends SimpleChannelInboundHandler<BabarRequest
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, BabarRequest req) throws Exception {
-		System.out.println("Received Data from Client:" + req.getRequestId());
+		log.info("Get request from client with requestId: " + req.getRequestId());
 		BabarResponse response = new BabarResponse();
 		response.setRequestId(req.getRequestId());
 		try {
@@ -29,6 +33,7 @@ public class BabarServerHandler extends SimpleChannelInboundHandler<BabarRequest
 			response.setError(e);
 		}
 		ctx.writeAndFlush(response);
+		log.info("Send response back to client with responseId: " + req.getRequestId());
 	}
 
 	public Map<String, Object> getHandlerMap() {
@@ -45,6 +50,7 @@ public class BabarServerHandler extends SimpleChannelInboundHandler<BabarRequest
 		String methodName = req.getMethodName();
 		Object[] parameters = req.getParameters();
 		Method method = serviceImpl.getClass().getMethod(methodName, req.getParameterTypes());
+		log.info("Invode function call with class name: " + className + " method name: " + methodName);
 		return method.invoke(serviceImpl, parameters);
 	}
 }

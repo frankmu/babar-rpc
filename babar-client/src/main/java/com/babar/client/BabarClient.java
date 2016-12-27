@@ -1,5 +1,7 @@
 package com.babar.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -30,6 +32,7 @@ public class BabarClient {
 	BabarClientChannelPoolHandler babarClientChannelPoolHandler;
 
 	private ChannelPool pool;
+	private static final Logger logger = LoggerFactory.getLogger(BabarClient.class);
 
 	@EventListener
 	public void handleContextRefresh(ContextRefreshedEvent event){
@@ -39,6 +42,7 @@ public class BabarClient {
 		b.channel(NioSocketChannel.class);
 		b.remoteAddress(env.getProperty("rpc.server.host"), Integer.parseInt(env.getProperty("rpc.server.port")));
 		pool = new SimpleChannelPool(b, babarClientChannelPoolHandler);
+		logger.info("Created simple channel pool on: " + env.getProperty("rpc.server.host") + ":" + env.getProperty("rpc.server.port"));
 	}
 
 	public void send(BabarRequest req){
@@ -49,6 +53,7 @@ public class BabarClient {
 				if(f.isSuccess()){
 					Channel ch = f.getNow();
 					ch.writeAndFlush(req);
+					logger.info("Send request to server with requestId: " + req.getRequestId());
 					pool.release(ch);
 				}
 			}

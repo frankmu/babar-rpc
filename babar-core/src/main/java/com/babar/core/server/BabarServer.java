@@ -4,6 +4,8 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.PropertySource;
@@ -25,6 +27,7 @@ public class BabarServer {
 	@Autowired
 	private Environment env;
 	private Map<String, Object> handlerMap = new HashMap<String, Object>();
+	Log log = LogFactory.getLog(this.getClass());
 
 	@EventListener
 	public void handleContextRefresh(ContextRefreshedEvent event) throws UnknownHostException {
@@ -36,6 +39,7 @@ public class BabarServer {
 			b.group(bossGroup, workerGroup);
 			b.channel(NioServerSocketChannel.class);
 			b.childHandler(new BabarServerInitializer(handlerMap));
+			log.info("Babar Server started on: " + env.getProperty("server.host") + ":" + env.getProperty("server.port"));
 			b.bind(env.getProperty("server.host"), Integer.parseInt(env.getProperty("server.port"))).sync().channel().closeFuture().sync();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -50,6 +54,7 @@ public class BabarServer {
 		for(Object bean : serviceBeanMap.values()){
 			String interfaceName = bean.getClass().getAnnotation(BabarService.class).value().getName();
 			handlerMap.put(interfaceName, bean);
+			log.info("Register service " + interfaceName + " with bean " + bean.getClass().getName());
 		}
 	}
 }

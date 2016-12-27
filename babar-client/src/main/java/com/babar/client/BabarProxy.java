@@ -7,6 +7,8 @@ import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +23,8 @@ public class BabarProxy {
 
 	@Autowired
 	BabarResponseMap babarResponseMap;
+	
+	private static final Logger logger = LoggerFactory.getLogger(BabarProxy.class);
 
 	@SuppressWarnings("unchecked")
 	public <T> T create(Class<?> clazz){
@@ -37,6 +41,7 @@ public class BabarProxy {
 			req.setParameters(args);
 			req.setParameterTypes(method.getParameterTypes());
 			babarClient.send(req);
+			logger.info("Calling babar client to send request with requestId: " + req.getRequestId());
 			BabarResponse response = getResponse(req.getRequestId());
 			if(response.getError() != null){
 				return response.getError();
