@@ -15,7 +15,7 @@
 		</dependency>
 		<dependency>
 			<groupId>babar</groupId>
-			<artifactId>babar-sample-service-impl</artifactId>
+			<artifactId>babar-service-sample-impl</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

@@ -1,4 +1,4 @@
-package com.babar.sample.service;
+package com.babar.service.sample;
 
 public interface IBabarSampleService {
 	

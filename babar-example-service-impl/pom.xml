@@ -6,7 +6,7 @@
 		<artifactId>babar-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>babar-sample-service-impl</artifactId>
+	<artifactId>babar-service-sample-impl</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>babar</groupId>
@@ -15,7 +15,7 @@
 		</dependency>
 		<dependency>
 			<groupId>babar</groupId>
-			<artifactId>babar-sample-service</artifactId>
+			<artifactId>babar-service-sample</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

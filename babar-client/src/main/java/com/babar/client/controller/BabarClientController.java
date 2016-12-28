@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.babar.client.BabarProxy;
-import com.babar.sample.service.IBabarSampleService;;
+import com.babar.service.sample.IBabarSampleService;;
 
 @RestController
 public class BabarClientController {

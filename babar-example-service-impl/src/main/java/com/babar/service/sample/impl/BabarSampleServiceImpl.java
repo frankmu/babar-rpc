@@ -1,9 +1,9 @@
-package com.babar.sample.service.impl;
+package com.babar.service.sample.impl;
 
 import org.springframework.stereotype.Component;
 
 import com.babar.common.BabarService;
-import com.babar.sample.service.IBabarSampleService;
+import com.babar.service.sample.IBabarSampleService;
 
 @Component
 @BabarService(value = IBabarSampleService.class)
