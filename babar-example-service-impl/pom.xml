@@ -11,17 +11,17 @@
 		<dependency>
 			<groupId>babar</groupId>
 			<artifactId>babar-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${babar.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>babar</groupId>
 			<artifactId>babar-service-sample</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${babar.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>4.3.4.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 	</dependencies>
 </project>

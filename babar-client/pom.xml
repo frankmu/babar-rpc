@@ -7,7 +7,6 @@
 	<parent>
 		<groupId>babar</groupId>
 		<artifactId>babar-parent</artifactId>
-		<relativePath>../babar-parent</relativePath>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
@@ -22,22 +21,22 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>1.4.2.RELEASE</version>
+			<version>${springboot.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-all</artifactId>
-			<version>4.1.6.Final</version>
+			<version>${netty.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>babar</groupId>
 			<artifactId>babar-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${babar.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>babar</groupId>
 			<artifactId>babar-service-sample</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${babar.version}</version>
 		</dependency>
 	</dependencies>
 

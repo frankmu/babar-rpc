@@ -11,11 +11,18 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<babar.version>0.0.1-SNAPSHOT</babar.version>
+		<springboot.version>1.4.2.RELEASE</springboot.version>
+		<spring.version>4.3.4.RELEASE</spring.version>
+		<netty.version>4.1.6.Final</netty.version>
+		<log4j.version>2.7</log4j.version>
 	</properties>
 	<modules>
 		<module>../babar-client</module>
 		<module>../babar-common</module>
 		<module>../babar-core</module>
+		<module>../babar-service-sample</module>
+		<module>../babar-service-sample-impl</module>
 	</modules>
 	<build>
 		<pluginManagement>
