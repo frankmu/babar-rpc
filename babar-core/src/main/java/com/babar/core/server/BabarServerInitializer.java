@@ -10,13 +10,16 @@ import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
+import io.netty.util.concurrent.EventExecutorGroup;
 
 public class BabarServerInitializer extends ChannelInitializer<SocketChannel>{
 	
 	private Map<String, Object> handlerMap;
+	private EventExecutorGroup executorGroup;
 
-	public BabarServerInitializer(Map<String, Object> handlerMap) {
+	public BabarServerInitializer(Map<String, Object> handlerMap, EventExecutorGroup executorGroup) {
 		this.handlerMap = handlerMap;
+		this.executorGroup = executorGroup;
 	}
 
 	@Override
@@ -26,6 +29,6 @@ public class BabarServerInitializer extends ChannelInitializer<SocketChannel>{
 		pipeline.addLast(new LengthFieldPrepender(4));
 		pipeline.addLast(new ObjectEncoder());
 		pipeline.addLast(new ObjectDecoder(ClassResolvers.cacheDisabled(null)));
-		pipeline.addLast(new BabarServerHandler(handlerMap));
+		pipeline.addLast(executorGroup, new BabarServerHandler(handlerMap));
 	}
 }

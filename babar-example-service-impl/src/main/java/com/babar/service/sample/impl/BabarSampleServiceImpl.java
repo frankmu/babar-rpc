@@ -11,7 +11,13 @@ public class BabarSampleServiceImpl implements IBabarSampleService{
 
 	@Override
 	public String Hello(String name) {
-		return "Hello " + name;
+		try {
+			Thread.sleep(1000);
+			return "Hello " + name;
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			return "error";
+		}
 	}
 
 }

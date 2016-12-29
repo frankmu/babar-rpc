@@ -20,6 +20,8 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.concurrent.DefaultEventExecutorGroup;
+import io.netty.util.concurrent.EventExecutorGroup;
 
 @PropertySource("classpath:config.properties")
 @Component
@@ -34,11 +36,12 @@ public class BabarServer {
 		registerService(event);
 		EventLoopGroup bossGroup = new NioEventLoopGroup();
 		EventLoopGroup workerGroup = new NioEventLoopGroup();
+		EventExecutorGroup executorGroup = new DefaultEventExecutorGroup(10, new BabarServerWorkerThreadFactory());
 		try {
 			ServerBootstrap b = new ServerBootstrap();
 			b.group(bossGroup, workerGroup);
 			b.channel(NioServerSocketChannel.class);
-			b.childHandler(new BabarServerInitializer(handlerMap));
+			b.childHandler(new BabarServerInitializer(handlerMap, executorGroup));
 			log.info("Babar Server started on: " + env.getProperty("server.host") + ":" + env.getProperty("server.port"));
 			b.bind(env.getProperty("server.host"), Integer.parseInt(env.getProperty("server.port"))).sync().channel().closeFuture().sync();
 		} catch (Exception e) {

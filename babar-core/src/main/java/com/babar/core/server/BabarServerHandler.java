@@ -23,7 +23,7 @@ public class BabarServerHandler extends SimpleChannelInboundHandler<BabarRequest
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, BabarRequest req) throws Exception {
-		log.info("Get request from client with requestId: " + req.getRequestId());
+		log.info("[" + Thread.currentThread().getName() + "] Get request from client with requestId: " + req.getRequestId());
 		BabarResponse response = new BabarResponse();
 		response.setRequestId(req.getRequestId());
 		try {
