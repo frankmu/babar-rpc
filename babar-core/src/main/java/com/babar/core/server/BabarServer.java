@@ -6,12 +6,11 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.babar.common.BabarService;
@@ -26,24 +25,38 @@ import io.netty.util.concurrent.EventExecutorGroup;
 @PropertySource("classpath:config.properties")
 @Component
 public class BabarServer {
-	@Autowired
-	private Environment env;
+
+	@Value("${babar.server.host}")
+	private String babarServerHost;
+
+	@Value("${babar.server.port}")
+	private int babarServerPort;
+
+	@Value("${babar.server.netty.boss.thread.number}")
+	private int babarServerNettyBossThreadNumber;
+
+	@Value("${babar.server.netty.worker.thread.number}")
+	private int babarServerNettyWorkerThreadNumber;
+
+	@Value("${babar.server.worker.thread.number}")
+	private int babarServerWorkerThreadNumber;
+
 	private Map<String, Object> handlerMap = new HashMap<String, Object>();
 	Log log = LogFactory.getLog(this.getClass());
 
 	@EventListener
 	public void handleContextRefresh(ContextRefreshedEvent event) throws UnknownHostException {
 		registerService(event);
-		EventLoopGroup bossGroup = new NioEventLoopGroup();
-		EventLoopGroup workerGroup = new NioEventLoopGroup();
-		EventExecutorGroup executorGroup = new DefaultEventExecutorGroup(10, new BabarServerWorkerThreadFactory());
+		EventLoopGroup bossGroup = new NioEventLoopGroup(babarServerNettyBossThreadNumber);
+		EventLoopGroup workerGroup = new NioEventLoopGroup(babarServerNettyWorkerThreadNumber);
+		EventExecutorGroup executorGroup = new DefaultEventExecutorGroup(babarServerWorkerThreadNumber, new BabarServerWorkerThreadFactory());
 		try {
 			ServerBootstrap b = new ServerBootstrap();
 			b.group(bossGroup, workerGroup);
 			b.channel(NioServerSocketChannel.class);
 			b.childHandler(new BabarServerInitializer(handlerMap, executorGroup));
-			log.info("Babar Server started on: " + env.getProperty("server.host") + ":" + env.getProperty("server.port"));
-			b.bind(env.getProperty("server.host"), Integer.parseInt(env.getProperty("server.port"))).sync().channel().closeFuture().sync();
+			log.info("Babar Server started on: " + babarServerHost + ":" + babarServerPort);
+			b.bind(babarServerHost, babarServerPort).sync().channel().closeFuture().sync();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
