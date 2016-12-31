@@ -25,17 +25,14 @@ import io.netty.util.concurrent.FutureListener;
 @Component
 public class BabarClient {
 
-	@Value("${babar.server.host}")
-	private String babarServerHost;
-
-	@Value("${babar.server.port}")
-	private int babarServerPort;
-
 	@Value("${babar.client.netty.thread.number}")
 	private int babarClientNettyThreadNumber;
 
 	@Autowired
 	BabarClientChannelPoolHandler babarClientChannelPoolHandler;
+
+	@Autowired
+	BabarServiceDiscovery babarServiceDiscovery;
 
 	private ChannelPool pool;
 	private static final Logger logger = LoggerFactory.getLogger(BabarClient.class);
@@ -46,9 +43,10 @@ public class BabarClient {
 		Bootstrap b = new Bootstrap();
 		b.group(group);
 		b.channel(NioSocketChannel.class);
-		b.remoteAddress(babarServerHost, babarServerPort);
+		String[] serviceHost = babarServiceDiscovery.getServiceRegistry().split(":");
+		b.remoteAddress(serviceHost[0], Integer.parseInt(serviceHost[1]));
 		pool = new SimpleChannelPool(b, babarClientChannelPoolHandler);
-		logger.info("Created simple channel pool on: " + babarServerHost + ":" + babarServerPort);
+		logger.info("Created simple channel pool on: " + serviceHost[0] + ":" + serviceHost[1]);
 	}
 
 	public void send(BabarRequest req){

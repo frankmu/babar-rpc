@@ -50,10 +50,10 @@ public class BabarServiceRegistry {
 		}
 	}
 
-	public void registerService(String path, String serviceName){
+	public void registerService(String path, String data){
 		try {
-			zooKeeper.create(path, serviceName == null ? null : serviceName.getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
-			log.info("Created zookeeper node [" + path + "] -> [" + serviceName + "]");
+			zooKeeper.create(path, data == null ? null : data.getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
+			log.info("Created zookeeper node [" + path + "] -> [" + data + "]");
 		} catch (KeeperException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
