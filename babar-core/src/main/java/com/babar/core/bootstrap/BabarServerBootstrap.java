@@ -6,6 +6,7 @@ import com.babar.core.config.BabarConfig;
 public class BabarServerBootstrap {
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
-		new AnnotationConfigApplicationContext(BabarConfig.class);
+		AnnotationConfigApplicationContext cxt = new AnnotationConfigApplicationContext(BabarConfig.class);
+		cxt.registerShutdownHook();
 	}
 }
