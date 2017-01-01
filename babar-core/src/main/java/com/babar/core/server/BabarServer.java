@@ -63,8 +63,8 @@ public class BabarServer implements DisposableBean{
 			b.group(bossGroup, workerGroup);
 			b.channel(NioServerSocketChannel.class);
 			b.childHandler(new BabarServerInitializer(handlerMap, executorGroup));
-			babarServiceRegistry.registerService(zooKeeperBabarServerPath, babarServerHost + ":" + babarServerPort);
 			babarServiceRegistry.initRegistryPath(); /*remove this if want to register multiple services under same parent path*/
+			babarServiceRegistry.registerService(zooKeeperBabarServerPath, babarServerHost + ":" + babarServerPort);
 			log.info("Babar Server started on: " + babarServerHost + ":" + babarServerPort);
 			b.bind(babarServerHost, babarServerPort).sync().channel().closeFuture().sync();
 		} catch (Exception e) {
