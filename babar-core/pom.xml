@@ -5,17 +5,13 @@
 		<groupId>babar</groupId>
 		<artifactId>babar-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../babar-parent/pom.xml</relativePath>
 	</parent>
 	<artifactId>babar-core</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>babar</groupId>
 			<artifactId>babar-common</artifactId>
-			<version>${babar.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>babar</groupId>
-			<artifactId>babar-service-sample-impl</artifactId>
 			<version>${babar.version}</version>
 		</dependency>
 		<dependency>

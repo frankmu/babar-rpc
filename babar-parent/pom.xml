@@ -19,8 +19,8 @@
 		<zookeeper.version>3.4.9</zookeeper.version>
 	</properties>
 	<modules>
-		<module>../babar-client</module>
 		<module>../babar-common</module>
+		<module>../babar-client</module>
 		<module>../babar-core</module>
 		<module>../babar-service-sample</module>
 		<module>../babar-service-sample-impl</module>

@@ -4,6 +4,7 @@
     <groupId>babar</groupId>
     <artifactId>babar-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../babar-parent/pom.xml</relativePath>
   </parent>
   <artifactId>babar-common</artifactId>
   <packaging>jar</packaging>
