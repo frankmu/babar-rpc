@@ -1,4 +1,4 @@
-# babar
+# babar-rpc
 babar is a light weight RPC framework built on Netty 4
 ## Some key features:
 * Build on Netty 4 using NIO for high performance.
