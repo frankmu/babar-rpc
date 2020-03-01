@@ -1,5 +1,7 @@
 package com.babar.rpc.client.controller;
 
+import java.util.concurrent.ExecutionException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,8 +18,8 @@ public class BabarClientController {
 	private BabarRPCProxy babarProxy;
 
 	@RequestMapping(value="/hello", method=RequestMethod.GET)
-	public String hello(@RequestParam(value="name", required=false, defaultValue="world")String name) {
+	public String hello(@RequestParam(value="name", required=false, defaultValue="world")String name) throws InterruptedException, ExecutionException {
 		IBabarSampleService service = babarProxy.create(IBabarSampleService.class);
-		return service.Hello(name);
+		return service.Hello(name).get();
 	}
 }

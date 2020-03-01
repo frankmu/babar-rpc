@@ -1,25 +1,23 @@
 package com.babar.rpc.client;
 
-import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Component;
 
-import com.babar.rpc.common.BabarRPCResponse;
-
 @Component
 public class BabarRPCResponseMap {
-	private ConcurrentHashMap<String, BlockingQueue<BabarRPCResponse>> responseMap;
+	private ConcurrentHashMap<String, CompletableFuture<Object>> responseMap;
 	
 	public BabarRPCResponseMap(){
-		responseMap = new ConcurrentHashMap<String, BlockingQueue<BabarRPCResponse>>();
+		responseMap = new ConcurrentHashMap<String, CompletableFuture<Object>>();
 	}
 
-	public ConcurrentHashMap<String, BlockingQueue<BabarRPCResponse>> getResponseMap() {
+	public ConcurrentHashMap<String, CompletableFuture<Object>> getResponseMap() {
 		return responseMap;
 	}
 
-	public void setResponseMap(ConcurrentHashMap<String, BlockingQueue<BabarRPCResponse>> responseMap) {
+	public void setResponseMap(ConcurrentHashMap<String, CompletableFuture<Object>> responseMap) {
 		this.responseMap = responseMap;
 	}
 }

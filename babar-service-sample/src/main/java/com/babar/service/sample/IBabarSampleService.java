@@ -1,6 +1,8 @@
 package com.babar.service.sample;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface IBabarSampleService {
 	
-	public String Hello(String name);
+	public CompletableFuture<String> Hello(String name);
 }

@@ -4,8 +4,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.UUID;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.babar.rpc.common.BabarRPCRequest;
-import com.babar.rpc.common.BabarRPCResponse;
 
 @Component
 public class BabarRPCProxy {
@@ -40,27 +38,12 @@ public class BabarRPCProxy {
 			req.setMethodName(method.getName());
 			req.setParameters(args);
 			req.setParameterTypes(method.getParameterTypes());
+			
+			logger.info("Create 1 record in response map with requestId: " + req.getRequestId());
+			babarRPCResponseMap.getResponseMap().putIfAbsent(req.getRequestId(), new CompletableFuture<Object>());
+			
 			babarClient.send(req);
-			logger.info("Calling babar client to send request with requestId: " + req.getRequestId());
-			BabarRPCResponse response = getResponse(req.getRequestId());
-			if(response.getError() != null){
-				return response.getError();
-			}else{
-				return response.getResult();
-			}
+			return babarRPCResponseMap.getResponseMap().get(req.getRequestId());
 		}
-	}
-	private BabarRPCResponse getResponse(String requestId){
-		BabarRPCResponse res = null;
-		babarRPCResponseMap.getResponseMap().putIfAbsent(requestId, new LinkedBlockingQueue<BabarRPCResponse>(1));
-		try {
-			res = babarRPCResponseMap.getResponseMap().get(requestId).take();
-			if(res == null){
-				res = babarRPCResponseMap.getResponseMap().get(requestId).poll(5, TimeUnit.SECONDS);
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		return res;
 	}
 }

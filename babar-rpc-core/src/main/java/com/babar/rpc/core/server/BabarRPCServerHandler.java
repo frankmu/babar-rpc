@@ -50,7 +50,7 @@ public class BabarRPCServerHandler extends SimpleChannelInboundHandler<BabarRPCR
 		String methodName = req.getMethodName();
 		Object[] parameters = req.getParameters();
 		Method method = serviceImpl.getClass().getMethod(methodName, req.getParameterTypes());
-		log.info("Invode function call with class name: " + className + " method name: " + methodName);
+		log.info("Invoke function call with class name: " + className + " method name: " + methodName);
 		return method.invoke(serviceImpl, parameters);
 	}
 }

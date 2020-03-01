@@ -1,12 +1,10 @@
 package com.babar.rpc.client;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.babar.rpc.common.BabarRPCRequest;
 import com.babar.rpc.common.BabarRPCResponse;
 
 import io.netty.channel.ChannelDuplexHandler;
@@ -26,18 +24,13 @@ public class BabarRPCClientHandler extends ChannelDuplexHandler {
 		logger.info("Get response from server with message type " + msg.getClass().getName());
 		if(msg instanceof BabarRPCResponse){
 			BabarRPCResponse res = (BabarRPCResponse) msg;
-			BlockingQueue<BabarRPCResponse> queue = babarRPCResponseMap.getResponseMap().get(res.getRequestId());
-			queue.offer(res);
+			CompletableFuture<Object> future = babarRPCResponseMap.getResponseMap().get(res.getRequestId());
+			future.complete(res.getResult());
 		}
 	}
 	@Override
 	public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception{
 		logger.info("Send request to server with message type: " + msg.getClass().getName());
-		if(msg instanceof BabarRPCRequest){
-			BabarRPCRequest req = (BabarRPCRequest) msg;
-			babarRPCResponseMap.getResponseMap().putIfAbsent(req.getRequestId(), new LinkedBlockingQueue<BabarRPCResponse>(1));
-			logger.info("Create 1 record in response map with requestId: " + req.getRequestId());
-		}
 		super.write(ctx, msg, promise);
 	}
 }

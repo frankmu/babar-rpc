@@ -7,9 +7,8 @@ import com.babar.service.sample.IBabarSampleService;
 
 @Component
 @BabarRPCService(value = IBabarSampleService.class)
-public class BabarSampleServiceImpl implements IBabarSampleService{
+public class BabarSampleServiceImpl{
 
-	@Override
 	public String Hello(String name) {
 		try {
 			Thread.sleep(1000);
